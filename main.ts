@@ -15,23 +15,31 @@ const hash = process.argv[2] as `0x${string}`;
 console.log("Hash: ", hash);
 
 (async () => {
-    const client = getClient(chain)
+    try {
+        const client = getClient(chain);
 
-    const chainId = await client.getChainId()
-    console.log("Chain: ", chainId)
+        const chainId = await client.getChainId();
+        console.log("Chain: ", chainId);
 
-    const transaction = await client.getTransaction({ hash })
-    console.log("Block Number: ", transaction.blockNumber)
+        const transaction = await client.getTransaction({ hash });
+        console.log("Block Number: ", transaction.blockNumber);
 
-    if (!isSufficient(transaction)) {
-        console.error("In valid staking amount")
-        return;
+        if (!isSufficient(transaction)) {
+            console.error("Invalid staking amount");
+            process.exit(1); // Exit with code 1 to indicate failure
+        }
+
+        if (!isCorrectAddress(transaction, chainId.toString())) {
+            console.error("Invalid staking address");
+            process.exit(1); // Exit with code 1 to indicate failure
+        }
+
+        // If all validations pass
+        console.log("Validation successful!");
+        process.exit(0); // Exit with code 0 to indicate success
+
+    } catch (error) {
+        console.error("Error:", error.message);
+        process.exit(1); // Exit with code 1 to indicate failure
     }
-
-    if (!isCorrectAddress(transaction, chainId.toString())) {
-        console.error("In valid staking amount")
-        return;
-    }
-
-    // Validate!
 })()
