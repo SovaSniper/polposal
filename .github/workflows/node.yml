@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    if: ${{ github.event.label.name == 'inprogress' }}
+    if: ${{ github.event.label.name == 'in progress' }}
 
     steps:
       - name: Checkout repository
