@@ -10,8 +10,8 @@ import { openCampusCodex } from './lib/chains/open-campus-codex';
 dotenv.config();
 const chain = openCampusCodex.id;
 
-// const argument = process.argv[2];
-const hash = '0x262ec99b269235fbae0450aab044d57caec49e1714c42e903031faafe49b2aa6';
+const hash = process.argv[2] as `0x${string}`;
+// const hash = '0x262ec99b269235fbae0450aab044d57caec49e1714c42e903031faafe49b2aa6';
 
 (async () => {
     const client = getClient(chain)
