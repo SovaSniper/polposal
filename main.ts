@@ -12,6 +12,7 @@ const chain = openCampusCodex.id;
 
 const hash = process.argv[2] as `0x${string}`;
 // const hash = '0x262ec99b269235fbae0450aab044d57caec49e1714c42e903031faafe49b2aa6';
+console.log("Hash: ", hash);
 
 (async () => {
     const client = getClient(chain)

@@ -1,12 +1,8 @@
-name: Run npm start with argument
+name: Run npm start with argument on issue close
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  issues:
+    types: [closed]
 
 jobs:
   build:
@@ -24,5 +20,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run npm script with PR data
-        run: npm run start -- ${{ github.event.pull_request.title }}
+      - name: Run npm script with issue data
+        run: npm run start -- ${{ github.event.issue.title }}
