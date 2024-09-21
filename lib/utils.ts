@@ -1,51 +1,49 @@
-import { createPublicClient, http, parseEther, Transaction } from "viem";
-import { openCampusCodex } from "./chains/open-campus-codex";
-import { getChains } from "./chains";
+import { execSync } from "child_process";
+import GitUrlParse from "git-url-parse";
+import { validate } from "./quest/validate";
 
-/**
- * Required staking amount is 10 native token
- */
-export const STAKING_AMOUNT = parseEther('10')
+export const retrieveQuest = async (uri: string) => {
+    const parsed = GitUrlParse(uri, [])
+    if (!parsed.owner || !parsed.name)
+        throw new Error("Invalid Github Repo")
 
-/**
- * This check if the staking amount is correct
- * @param hash 
- * @returns 
- */
-export const isSufficient = (hash: Transaction) =>
-    hash.value === STAKING_AMOUNT
+    const config = `https://raw.githubusercontent.com/${parsed.owner}/${parsed.name}/refs/heads/master/quest.config.json`
+    const response = await fetch(config)
+    return response.json()
+}
 
-/**
- * Staking address
- */
-export const STAKING_ADDRESS = (chainId: string) => {
-    switch (chainId) {
-        case openCampusCodex.id.toString():
-            return "0x9B6089b63BEb5812c388Df6cb3419490b4DF4d54"
-        default:
-            return ""
+export const retrievePoapImage = async (uri: string) => {
+    const parsed = GitUrlParse(uri, [])
+    if (!parsed.owner || !parsed.name)
+        throw new Error("Invalid Github Repo")
+
+    const config = `https://raw.githubusercontent.com/${parsed.owner}/${parsed.name}/refs/heads/master/poap/image.png`
+    const response = await fetch(config)
+    return response.blob()
+}
+
+export const retrievePoapMetadata = async (uri: string) => {
+    const parsed = GitUrlParse(uri, [])
+    if (!parsed.owner || !parsed.name)
+        throw new Error("Invalid Github Repo")
+
+    const config = `https://raw.githubusercontent.com/${parsed.owner}/${parsed.name}/refs/heads/master/poap/metadata.json`
+    const response = await fetch(config)
+    return response.json()
+}
+
+export const validateQuest = async (uri: string) => {
+    const config = await retrieveQuest(uri)
+    return validate(JSON.stringify(config))
+}
+
+export const runCommand = (command: string): boolean => {
+    try {
+        execSync(command, { stdio: "inherit" });  // 'inherit' will show output to the console in real time
+        return true;
+    } catch (error: any) {
+        console.error(`Failed to execute command: ${command}`);
+        console.error(`Error: ${error.message}`);
+        return false;
     }
-}
-
-/**
- * This checks if the payload staking amount is sent to correct reciepient
- * @param hash 
- * @param chainId 
- * @returns 
- */
-export const isCorrectAddress = (hash: Transaction, chainId: string) =>
-    hash.to === STAKING_ADDRESS(chainId)
-
-
-/**
- * Get client for rpc
- * @param testnet 
- * @returns 
- */
-export const getClient = (chainId: number = openCampusCodex.id) => {
-    const chain = getChains(chainId)
-    return createPublicClient({
-        chain,
-        transport: http(chain.rpcUrls[0])
-    })
-}
+};
