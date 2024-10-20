@@ -18,7 +18,9 @@ const uri = args[0];
 
 (async () => {
     try {
+        console.log(`Validating Repo ${uri} ...`)
         const data = await validateQuest(uri)
+        console.log(`Repo is valid`)
     } catch (error) {
         console.error("Error:", error.message);
         process.exit(1); // Exit with code 1 to indicate failure

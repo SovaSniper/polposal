@@ -39,3 +39,31 @@ By following this process, your resource will become part of the Proof of Learn 
 ## Status Terms
 
 TODO
+
+--- 
+
+
+# More technical
+
+Given a repository, for example - https://github.com/5208980/pol-template
+
+### Pre Checks
+
+We'll need to submit an issue with the title of repo. It'll run `pre:quest` base of the repo provided. This validates, the quest.config.json. To ensure that all the information is valid for storing.
+
+### Staking
+
+Once that passes, we can ask for staking. This is provided as a **transaction hash**, and 
+
+### Manual Verification
+
+The next step is a manually process, where the community and the team will. The issue will also be tagged as `in progress`. 
+
+Verification will involve, 
+- Content in resournce is correct and safe to be shown on POL
+- Quests in `quest.config.json` is accessible for everything to submit
+- If POAP is available, then include POAP image and metadata to store on chain. 
+
+### Adding to POL
+
+After successful manual verification, the issue will be tagged as `completed`. This means that the team as close the issue, and when that happens. The pipeline will run `post:poap` to store information about the POAP on IPFS and on chain 

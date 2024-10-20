@@ -29,15 +29,9 @@ const chain = openCampusCodex.id;
     try {
         // Upload Poap Image
         const blob = await retrievePoapImage(uri)
-        // const imgUpload = await uploadToIPFS({
-        //     data: blob, group: "images"
-        // })
-        const imgUpload = {
-            IpfsHash: 'QmStw2E79stkmBH9kjjRYHVoPNztrbQsxXchfxTnmRVh3h',
-            PinSize: 53725,
-            Timestamp: '2024-09-19T08:34:02.887Z',
-            isDuplicate: true
-        }
+        const imgUpload = await uploadToIPFS({
+            data: blob, group: "images"
+        })
         console.log("Image Uploaded: ", imgUpload.IpfsHash)
 
         if (!imgUpload.IpfsHash)
@@ -79,7 +73,7 @@ const chain = openCampusCodex.id;
             address: process.env.POAP_CONTRACT as `0x${string}`,
             abi: parseAbi(['function mint(address to, uint256 id, bytes memory data) nonpayable']),
             functionName: 'mint',
-            args: [account.address, BigInt(1), "0x"]
+            args: [account.address, tokenId, "0x"]
         })
         console.log("Minted: ", hash)
     } catch (e: any) {
